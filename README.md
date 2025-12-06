@@ -1,16 +1,18 @@
-# 準備
+# roseus_detic_sample
+
+## 準備
 
 - detic_rosのインストール
-  - https://github.com/HiroIshida/detic_ros
+	- https://github.com/HiroIshida/detic_ros
 - jaxon auto stabilizer環境の構築
 
-# 使用例
+## 使用例
 
-- simulator 起動
+### simulator 起動
 ```
 rosrun auto_stabilizer_config start-jaxon_red_with_mslhand-sim.sh 
 ```
-- auto stabilizer 起動(必須ではない)
+### auto stabilizer 起動(必須ではない)
 ```
 roscd auto_stabilizer_config/scripts
 ipython3 -i ./jaxon_red_with_mslhand_setup.py
@@ -18,7 +20,7 @@ hcf.ast_svc.startAutoBalancer()
 hcf.ast_svc.startStabilizer()
 ```
 
-- detic_ros 起動
+### detic_ros 起動
 ```
 roslaunch detic_ros sample_detection.launch \
 	debug:=true \
@@ -28,9 +30,14 @@ roslaunch detic_ros sample_detection.launch \
 	target_frame_id:=rs_l515_depth_optical_frame \
 	sync_bounding_box_and_label:=true \
 ```
+- sync_bounding_box_and_labelについて
+  - /docker/detic_segmentor/output/boxesと/docker/detic_segmentor/detected_classesはnsec以下で周期がずれているので，exact_time_message_filterを用いるとcallbackがほとんど呼ばれなくなってしまう
+    - exact_time_message_filterはトピックのヘッダーのタイムスタンプが完全に一致したときにcallbackを呼ぶクラス
+  - sync_bounding_box_and_labelオプションにより，多少周期が遅くなるがトピックが同期しやすくなる
 
-- sample-detection.lを実行
-  - 初期位置では視界に認識できる物体が映っていないかもしれないので，必要に応じて位置姿勢を調整する
 
-# rviz
-- /docker/detic_segmentor/debug_image を見ると，認識しているラベルがわかる
+### sample-detection.lを実行
+- 初期位置では視界に認識できる物体が映っていないかもしれないので，必要に応じて位置姿勢を調整する
+
+## rviz
+- /docker/detic_segmentor/debug_image を見ると，認識しているラベルが分かる
