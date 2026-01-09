@@ -12,13 +12,6 @@
 ```
 rosrun auto_stabilizer_config start-jaxon_red_with_mslhand-sim.sh 
 ```
-### auto stabilizer 起動(必須ではない)
-```
-roscd auto_stabilizer_config/scripts
-ipython3 -i ./jaxon_red_with_mslhand_setup.py
-hcf.ast_svc.startAutoBalancer()
-hcf.ast_svc.startStabilizer()
-```
 
 ### detic_ros 起動
 ```
