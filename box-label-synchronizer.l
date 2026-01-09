@@ -28,7 +28,7 @@
       (when (contains label-list (send label :name))
         ;;カメラ座標系
 	(setq target-coords-camera (send (ros::tf-pose->coords (send box :pose)) :copy-worldcoords))
-	;;jaxon(腰)から見た座標系に変換
+	;;ワールド座標系へ座標変換
 	(setq target-coords (transform-coords (send *robot* :rs_l515_depth_optical_frame :worldcoords) target-coords-camera))
 	(setq target-dimensions (send box :dimensions))
 	(format t "coords ~A, dimension~A~%" (send target-coords :worldcoords) (* (send target-dimensions :x) (send target-dimensions :y) (send target-dimensions :z)))
