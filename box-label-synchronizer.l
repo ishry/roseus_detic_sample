@@ -22,14 +22,14 @@
 (defun box-cb (box-msg label-msg label-list)
   (ros::ros-info "received ~A boxes, ~A labels" (length (send box-msg :boxes)) (length (send label-msg :labels)))
   (dolist (msg-conbined (map cons #'(lambda (x y) (list  x y)) (send box-msg :boxes) (send label-msg :labels)))
-    (let (box label target-coords-camera target-coords target-dimensions)
+    (let (box label target-coords-raw target-coords target-dimensions)
       (setq box (car msg-conbined) label (cadr msg-conbined))
       (print (send label :name))
       (when (contains label-list (send label :name))
         ;;カメラ座標系
-	(setq target-coords-camera (send (ros::tf-pose->coords (send box :pose)) :copy-worldcoords))
-	;;ワールド座標系へ座標変換
-	(setq target-coords (transform-coords (send *robot* :rs_l515_depth_optical_frame :worldcoords) target-coords-camera))
+	(setq target-coords-raw (send (ros::tf-pose->coords (send box :pose)) :copy-worldcoords))
+	(setq target-coords target-coords-raw) ;; 座標変換しない場合
+	;; (setq target-coords (transform-coords (send *robot* :rs_l515_depth_optical_frame :worldcoords) target-coords-raw)) ;; 座標変換する場合
 	(setq target-dimensions (send box :dimensions))
 	(format t "coords ~A, dimension~A~%" (send target-coords :worldcoords) (* (send target-dimensions :x) (send target-dimensions :y) (send target-dimensions :z)))
 	;;検出位置に制限をつける場合
